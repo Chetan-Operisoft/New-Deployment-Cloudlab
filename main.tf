@@ -48,12 +48,12 @@ resource "aws_key_pair" "master-key-pair" {
   public_key = tls_private_key.master-key-gen.public_key_openssh
 }
 
-# Exploitable Windows - VSCODE/XAMP
-resource "aws_instance" "Window-VSCODE/XAMP" {
+# Exploitable Windows - VSCODE_XAMP
+resource "aws_instance" "Window_VSCODE_XAMP" {
   ami           = "ami-0e531e2365203ce30"  # Replace with your desired AMI ID
   instance_type = "t3a.medium"  # Replace with your desired instance type
   key_name      = aws_key_pair.master-key-pair.key_name
-  subnet_id = "subnet-0fd31cfc06b1857a4"
+  subnet_id     = "subnet-0fd31cfc06b1857a4"
   availability_zone = "ap-south-1a"
 
   security_groups = [aws_security_group.master.id]
@@ -63,13 +63,12 @@ resource "aws_instance" "Window-VSCODE/XAMP" {
   }
 }
 
-
 # Exploitable Windows - HADOOP
-resource "aws_instance" "Window-HADOOP" {
+resource "aws_instance" "Window_HADOOP" {
   ami           = "ami-0f191a2d39d240986"  # Replace with your desired AMI ID
   instance_type = "t3a.medium"  # Replace with your desired instance type
   key_name      = aws_key_pair.master-key-pair.key_name
-  subnet_id = "subnet-0fd31cfc06b1857a4"
+  subnet_id     = "subnet-0fd31cfc06b1857a4"
   availability_zone = "ap-south-1a"
 
   security_groups = [aws_security_group.master.id]
@@ -79,34 +78,38 @@ resource "aws_instance" "Window-HADOOP" {
   }
 }
 
-
 resource "local_file" "local_key_pair" {
-  filename = "${var.keypair_name}.pem"
+  filename        = "${var.keypair_name}.pem"
   file_permission = "0400"
-  content = tls_private_key.master-key-gen.private_key_pem
+  content         = tls_private_key.master-key-gen.private_key_pem
 }
 
 output "pem_file_for_ssh" {
-  value = tls_private_key.master-key-gen.private_key_pem
+  value     = tls_private_key.master-key-gen.private_key_pem
   sensitive = true
 }
 
-output "Window-VSCODE/XAMP" {
-  value = aws_instance.Window-VSCODE/XAMP.public_ip
+# Corrected output names to remove slashes
+output "Window_VSCODE_XAMP_public_ip" {
+  value = aws_instance.Window_VSCODE_XAMP.public_ip
 }
-output "VSCODE/XAMP-Windows_Username" {
+
+output "VSCODE_XAMP_Windows_Username" {
   value = "Administrator"
 }
-output "VSCODE/XAMP-Windows_Password" {
+
+output "VSCODE_XAMP_Windows_Password" {
   value = "t&1Wgv!=*HxXsi;Ca8Q7oP);*hidnQ5@"
 }
 
-output "Window-HADOOP" {
-  value = aws_instance.Window-HADOOP.public_ip
+output "Window_HADOOP_public_ip" {
+  value = aws_instance.Window_HADOOP.public_ip
 }
-output "HADOOP-Windows_Username" {
+
+output "HADOOP_Windows_Username" {
   value = "Administrator"
 }
-output "HADOOP-Windows_Password" {
+
+output "HADOOP_Windows_Password" {
   value = "?2NCaNG&Ntz=q14nhH*YJrXHXsw(PW.("
 }
