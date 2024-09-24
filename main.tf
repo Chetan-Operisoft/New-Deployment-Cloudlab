@@ -37,16 +37,6 @@ resource "aws_security_group" "master" {
   }
 }
 
-resource "tls_private_key" "master-key-gen" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-# Create the Key Pair of Kali Linux didn't have software
-resource "aws_key_pair" "master-key-pair" {
-  key_name   = var.keypair_name 
-  public_key = tls_private_key.master-key-gen.public_key_openssh
-}
 
 # Exploitable Windows - VSCODE_XAMP
 resource "aws_instance" "Window_VSCODE_XAMP" {
@@ -60,21 +50,6 @@ resource "aws_instance" "Window_VSCODE_XAMP" {
 
   tags = {
     Name = var.instance_name1
-  }
-}
-
-# Exploitable Windows - HADOOP
-resource "aws_instance" "Window_HADOOP" {
-  ami           = "ami-0f191a2d39d240986"  # Replace with your desired AMI ID
-  instance_type = "t3a.medium"  # Replace with your desired instance type
-  key_name      = aws_key_pair.master-key-pair.key_name
-  subnet_id     = "subnet-0fd31cfc06b1857a4"
-  availability_zone = "ap-south-1a"
-
-  security_groups = [aws_security_group.master.id]
-
-  tags = {
-    Name = var.instance_name2
   }
 }
 
@@ -102,14 +77,3 @@ output "VSCODE_XAMP_Windows_Password" {
   value = "t&1Wgv!=*HxXsi;Ca8Q7oP);*hidnQ5@"
 }
 
-output "Window_HADOOP_public_ip" {
-  value = aws_instance.Window_HADOOP.public_ip
-}
-
-output "HADOOP_Windows_Username" {
-  value = "Administrator"
-}
-
-output "HADOOP_Windows_Password" {
-  value = "?2NCaNG&Ntz=q14nhH*YJrXHXsw(PW.("
-}
