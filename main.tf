@@ -6,14 +6,15 @@ provider "aws" {
 resource "aws_security_group" "master" {
   vpc_id = "vpc-0f28bcc0b6a596b84"
 
-# port 22 for ssh conection
+  # port 22 for ssh connection
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-# port 3306 for db connection
+
+  # port 3389 for RDP connection
   ingress {
     from_port   = 3389
     to_port     = 3389
@@ -21,12 +22,12 @@ resource "aws_security_group" "master" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-# open to all
+  # open to all
   ingress {
     from_port = 0
-    to_port = 0
-    protocol = -1
-    self = true
+    to_port   = 0
+    protocol  = -1
+    self      = true
   }
 
   egress {
@@ -37,6 +38,17 @@ resource "aws_security_group" "master" {
   }
 }
 
+# Generate a private key
+resource "tls_private_key" "master-key-gen" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# Create an AWS key pair using the private key
+resource "aws_key_pair" "master-key-pair" {
+  key_name   = "master-key-pair"
+  public_key = tls_private_key.master-key-gen.public_key_openssh
+}
 
 # Exploitable Windows - VSCODE_XAMP
 resource "aws_instance" "Window_VSCODE_XAMP" {
@@ -76,4 +88,3 @@ output "VSCODE_XAMP_Windows_Username" {
 output "VSCODE_XAMP_Windows_Password" {
   value = "t&1Wgv!=*HxXsi;Ca8Q7oP);*hidnQ5@"
 }
-
