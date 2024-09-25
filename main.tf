@@ -53,7 +53,7 @@ resource "aws_key_pair" "master-key-pair" {
 # Exploitable Windows - VSCODE_XAMP
 resource "aws_instance" "Window_VSCODE_XAMP" {
   ami           = "ami-0e531e2365203ce30"  # Replace with your desired AMI ID
-  instance_type = "t3a.medium"  # Replace with your desired instance type
+  instance_type = "m6a.large"  # Replace with your desired instance type
   key_name      = aws_key_pair.master-key-pair.key_name
   subnet_id     = "subnet-0fd31cfc06b1857a4"
   availability_zone = "ap-south-1a"
