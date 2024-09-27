@@ -65,17 +65,6 @@ resource "aws_instance" "Window_VSCODE_XAMP" {
   }
 }
 
-resource "local_file" "local_key_pair" {
-  filename        = "${var.keypair_name}.pem"
-  file_permission = "0400"
-  content         = tls_private_key.master-key-gen.private_key_pem
-}
-
-output "pem_file_for_ssh" {
-  value     = tls_private_key.master-key-gen.private_key_pem
-  sensitive = true
-}
-
 # Corrected output names to remove slashes
 output "Window_VSCODE_XAMP_public_ip" {
   value = aws_instance.Window_VSCODE_XAMP.public_ip
