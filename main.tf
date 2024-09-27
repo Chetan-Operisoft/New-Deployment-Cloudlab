@@ -39,16 +39,16 @@ resource "aws_security_group" "master" {
 }
 
 # Generate a private key
-resource "tls_private_key" "master-key-gen" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
+#resource "tls_private_key" "master-key-gen" {
+#  algorithm = "RSA"
+#  rsa_bits  = 4096
+#}
 
 # Create an AWS key pair using the private key
-resource "aws_key_pair" "master-key-pair" {
-  key_name   = "master-key-pair"
-  public_key = tls_private_key.master-key-gen.public_key_openssh
-}
+#resource "aws_key_pair" "master-key-pair" {
+#  key_name   = "master-key-pair"
+#  public_key = tls_private_key.master-key-gen.public_key_openssh
+#}
 
 # Exploitable Windows - VSCODE_XAMP
 resource "aws_instance" "Window_VSCODE_XAMP" {
@@ -65,16 +65,16 @@ resource "aws_instance" "Window_VSCODE_XAMP" {
   }
 }
 
-resource "local_file" "local_key_pair" {
-  filename        = "${var.keypair_name}.pem"
-  file_permission = "0400"
-  content         = tls_private_key.master-key-gen.private_key_pem
-}
+#resource "local_file" "local_key_pair" {
+ # filename        = "${var.keypair_name}.pem"
+ # file_permission = "0400"
+ # content         = tls_private_key.master-key-gen.private_key_pem
+#}
 
-output "pem_file_for_ssh" {
-  value     = tls_private_key.master-key-gen.private_key_pem
-  sensitive = true
-}
+#output "pem_file_for_ssh" {
+#  value     = tls_private_key.master-key-gen.private_key_pem
+#  sensitive = true
+#}
 
 # Corrected output names to remove slashes
 output "Window_VSCODE_XAMP_public_ip" {
