@@ -38,7 +38,16 @@ resource "aws_security_group" "master" {
   }
 }
 
+resource "tls_private_key" "master-key-gen" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
 
+# Create the Key Pair of Kali Linux didn't have software
+resource "aws_key_pair" "master-key-pair" {
+  key_name   = var.keypair_name 
+  public_key = tls_private_key.master-key-gen.public_key_openssh
+}
 
 # Exploitable Windows - VSCODE_XAMP
 resource "aws_instance" "Window_VSCODE_XAMP" {
